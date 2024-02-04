@@ -37,11 +37,14 @@ def reshape(circuit, vertex_map):
         print(row)
         print(row.target[0])
 
-        op_name = row.operator
+        op_name = row.operator.name
         try: 
-            target = vertex_map[row.target[0]], vertex_map[row.target[1]]
+            target = [vertex_map[row.target[0]], vertex_map[row.target[1]]]
         except:
             target = vertex_map[row.target[0]]
+
+        print(target)
+        print(op_name)
 
         if op_name == "H":
             new_circuit.h(target)
@@ -113,6 +116,7 @@ def reshape(circuit, vertex_map):
         #     new_circuit += row
 
     print("New Circuit")
+    print(new_circuit)
     for row in new_circuit.instructions:
         print(row)
 
@@ -160,7 +164,7 @@ def main():
     sorted_circuit = reorder_overall(circuit3, 3, vertex_fidelity)
 
     print("New Circuit")
-    print(circuit3.instructions)
+    print(sorted_circuit.instructions)
 
 
     # print(reshape(circuit3, remap).instructions)
