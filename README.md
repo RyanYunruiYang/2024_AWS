@@ -10,7 +10,7 @@ So for an example, let's say I wanted to generate Bell state, which I define as 
 from braket.circuits import Circuit
 bell = Circuit().h(0).cnot(0, 1)
 ``` 
-![Local Image](standard-Bell.png)
+![Local Image](figures/standard-Bell.png)
 
 I want to run this circuit on the IonQ Harmony device and make sure I’m using the best qubits for the job. Therefore, I’ll query the two qubit gate fidelities (T2) like this: 
 ```
@@ -41,7 +41,7 @@ which gives
    'fCX': 0.7673442630631202}}}
 ```
 In this case, the two qubit gate fidelity is highest on the qubit pair ‘0-7’ , where 0 is the target and 7 is the control. So my noise-aware compiler would implement logic to remap my input circuit to run on those qubits. Doing this manually, we would have the following output circuit: <br>
-![Local Image](verbatim-remapped-bell.png)
+![Local Image](figures/verbatim-remapped-bell.png)
 
 **Hint**: make sure your output circuit uses [verbatim compilation](https://github.com/amazon-braket/amazon-braket-examples/blob/main/examples/braket_features/Verbatim_Compilation.ipynb) so your circuit doesn’t get recompiled again!
 
