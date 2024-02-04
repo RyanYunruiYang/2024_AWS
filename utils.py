@@ -1,3 +1,15 @@
+# Use Braket SDK Cost Tracking to estimate the cost to run this example
+from braket.tracking import Tracker
+t = Tracker().start()
+
+from braket.aws import AwsDevice
+from braket.circuits import Circuit, gates, noises, observables
+from braket.devices import LocalSimulator
+from braket.parametric import FreeParameter
+import numpy as np
+from scipy.stats import unitary_group
+import math
+
 def convert_instructions(instructions, n):
     # Find the maximum qubit index to determine the size of the output array
     max_qubit_index = n
@@ -28,3 +40,4 @@ def gate_cancellation(instruct_arr):
                 del gateLine[i-1]
             i += 1
             
+           

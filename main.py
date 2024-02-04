@@ -13,6 +13,7 @@ from ibm_compile import compile
 
 if __name__ == "__main__": 
     test_circuit = qft(3)
+    test_circuit_no_noise = qft(3)
     nm = noise_model()
 
     fidelities = fidelity_estimate(nm)
@@ -25,4 +26,7 @@ if __name__ == "__main__":
     # Run the circuits 
     device = LocalSimulator('braket_dm')
     test_result = device.run(test_circuit, shots=1000).result()
+    no_noise_result = device.run(test_circuit_no_noise, shots=1000).result()
     compiled_result = device.run(compiled_circuit, shots=1000).result()
+    
+    
