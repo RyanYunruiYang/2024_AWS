@@ -29,6 +29,12 @@ class fidelity_classifier:
         return c
 
     def single_qubit_fidelity(self, had_cnt=2):
+        """
+        Classifies the fidelity of every single qubit
+        in the qubit using two hadamard gates per qubit
+        Return Value: Array of length n where index i contains
+        the estimated fidelity of the i'th qubit
+        """
         c = self.create_hadamard_circuit(had_cnt)
         shotnum = 10000
         task = self.device.run(c, shots=shotnum)
@@ -49,7 +55,17 @@ class fidelity_classifier:
         ]
 
     def create_round_robin(self):
-        # Round Robin Creation
+        """
+        Generates a set of 2*n circuits that satisfy the following
+        properties:
+        -   For each ordered pair of qubits i, j: i will control j
+            in one of the circuits
+        -   Each qubit will be either control one qubit, be the target qubit
+            of one qubit or be disregarded in each one of the circuits 
+        
+        Return value: 2*n array of circuits. Each circuit is described as
+        a list of tuples (a,b) which corresponds to a CNOT gate of a -> b
+        """
         rownum = self.n - 1 + (self.n & 1)
         colnum = (self.n + 1) // 2
 
@@ -80,6 +96,13 @@ class fidelity_classifier:
         return table
 
     def two_qubit_fidelity(self):
+        """
+        Measures the fidelity of gates between every pair of two qubits
+        It does this in 2*n operations where n is the number of quantum
+        gates.
+        Return value: nxn array where the value at the index i,j represents
+        the fidelity of a CNOT gate from i -> j
+        """
         two_q_fidelity = np.zeros((self.n, self.n))
         table = self.create_round_robin()
         for round in table:
