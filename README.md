@@ -50,11 +50,47 @@ From the simulation, we were able to generate tables of both single qubit fideli
 
 
 ## Part 2: Compilation Optimization
-There is significant literature on quantum computing compiler infrastructure. Qiskit's **NoiseAdaptiveLayout** default compiler is based on the paper Murali, 2019. After closely analyzing the system, whose source code can be found [here](https://github.com/Qiskit/qiskit/blob/stable/0.46/qiskit/transpiler/passes/layout/noise_adaptive_layout.py). We closely analyzed the system, and discovered several areas for improvement, based on breaking down bottlenecks in (1) 
+There is significant literature on quantum computing compiler infrastructure. Qiskit's **NoiseAdaptiveLayout** default compiler is based on the paper Murali, 2019. After closely analyzing the system, whose source code can be found [here](https://github.com/Qiskit/qiskit/blob/stable/0.46/qiskit/transpiler/passes/layout/noise_adaptive_layout.py). We closely analyzed the system, and discovered several areas for improvement, based on breaking down their compiler:
+
+![Local Image](figures/murali.png)
 
 
-### 2.1: Initial Qubit Mapping
-Compilation Overview
+
+### 2.1: Initial Qubit Mapping: GreedySwap
+The Qiskit compiler uses the following two heuristics for estabilishing the initial mapping:
+- *The GreedyV heuristic*: Ranks the number of times each logical qubit is involved in a CNOT, and the quality of each hardware qubit, and assigns the ith most used logical qubit to be implemented by the ith best hardware qubit
+seeks to minimize communication distance by considering qubits in descending order of degree*
+- *GreedyE*: Ranks each pair of logical qubits by the number of times a CNOT is called between them, and assign these to the pairs of hardware qubits with the best two-qubit fidelity.
+
+![Local Image](figures/graph.png)
+
+We formalize the problem as follows. We observe we are given one graph $U$ which is a weighted graph representing the number of CNOT calls, and the graph $F$ which is a weighted graph with weights corresponding to fidelities. We then try to find the vertex permutation which minimizes $\sum_{E} U.E * \ln(F.E)$.
+
+Within published benchmarks, GreedyE empirically outperforms GreedyV:
+![Local Image](figures/EV.png)
+
+However, we observe that GreedyE can have arbitrarily bad behavior, for example with graphs resembling the following:
+![Local Image](figures/graph_E_bad.png)
+
+We observe that, in general, both GreedyE and GreedyV leave possible optimization on the table. This is because GreedyV only has visibility into the single-qubit fidelity of each qubit, and GreedyE doesn't have visibility into single-qubit fidelity and is a suboptimal greedy algorithm. GreedyV's drawbacks are significantly more difficult as the dominating decoherence factor is two-qubit fidelity. In general, we observe that it is unlikely that a greedy algorithm can one-shot optimize this combinatorial problem.
+
+
+Our approaches:
+- Approach 1: Bruteforce all $n!$ methods
+- Approach 2: GNN
+- Approach 3: GreedySwap!
+
+We focus on GreedySwap, which greedily *improves* upon a given mapping. We choose to initialize at the GreedyE configuration. To do this, we 
+- Begin with the GreedyE configuration
+- Repeatedly choose a random pair of logical qubits $i$ and $j$. Check if the estimated total fidelity increases or decreases if the two hardware qubits assigned to $i$ and $j$ are swapped.
+
+<!-- ![Local Image](figures/greedy_swap.png) -->
+
+
+
+
+
+<!-- Compilation Overview
 Limitations of the paper
 GreedyE and GreedyV heuristics mediocre
 Limited topology (grid / only nearest neighbors)
@@ -63,7 +99,7 @@ Paths only along edges of rectangle
 Heuristic Initialization
 We designed a new heuristic for the initialization of the 
 Runtime: SWAPs and CNOTs
-We recreated Murali 2019 papers 
+We recreated Murali 2019 papers  -->
 
 
 ## Implementing and Testing on 12 Quantum Circuits
