@@ -14,3 +14,17 @@ def convert_instructions(instructions, n):
                 
         # Additional processing for control-target operations could be added here if necessary
     return qubit_operations
+
+def gate_cancellation(instruct_arr):
+    for gateLine in instruct_arr:
+        print(gateLine)
+        i = 1
+        while(i < len(gateLine)):
+            print(gateLine[i])
+            a = gateLine[i]['operator']
+            b = gateLine[i-1]['operator']
+            if(a == b and (a == 'H' or a == 'X' or a == 'Y' or a == 'Z')):
+                del gateLine[i]
+                del gateLine[i-1]
+            i += 1
+            
