@@ -8,15 +8,24 @@ from circuits.qft import qft
 from braket.devices import LocalSimulator
 
 from simulating_noise import noise_model
-from fidelity_measurement import fidelity_estimate
-from ibm_compile import compile
+from fidelity_measurement import fidelity_classifier
 
-if __name__ == "__main__": 
-    test_circuit = qft(3)
-    test_circuit_no_noise = qft(3)
+if __name__ == "__main__":
+    # Set up quantum computer
+    device = LocalSimulator('braket_dm')
     nm = noise_model()
 
-    fidelities = fidelity_estimate(nm)
+    # Generate test circuit
+    test_circuit = qft(3)
+    test_circuit_no_noise = qft(3)
+
+    # Classify noise
+    device_fidelity = fidelity_classifier(11, device, nm)
+
+    single_qubit_fidelity = device_fidelity.single_qubit_fidelity()
+    two_qubit_fidelity = device.two_qubit_fidelity()
+    
+    # Compile circuit with noise input
     compiled_circuit = compile(test_circuit, fidelities)
 
     # apply the noise model to the circuit
@@ -24,7 +33,6 @@ if __name__ == "__main__":
     compiled_circuit = nm.apply(compiled_circuit)
 
     # Run the circuits 
-    device = LocalSimulator('braket_dm')
     test_result = device.run(test_circuit, shots=1000).result()
     no_noise_result = device.run(test_circuit_no_noise, shots=1000).result()
     compiled_result = device.run(compiled_circuit, shots=1000).result()
