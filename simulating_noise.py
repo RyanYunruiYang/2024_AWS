@@ -45,22 +45,26 @@ def noise_model():
                 m.add_noise(TwoQubitDepolarizing(two_q_depo_prob), GateCriteria(gates=[Gate.CNot, Gate.Swap, Gate.CPhaseShift], qubits=[qi, qj]))
     return m
 
-# build my circuit here
-c = Circuit()
-# SOME GATES GET APPLIED
+def main():
+    # build my circuit here
+    c = Circuit()
+    # SOME GATES GET APPLIED
 
-# examine the noiseless circuit 
-print(c)
+    # examine the noiseless circuit 
+    print(c)
 
-# apply the noise model to the circuit 
-nm = noise_model()
-c = nm.apply(c)
+    # apply the noise model to the circuit 
+    nm = noise_model()
+    c = nm.apply(c)
 
-# examine the noisy circuit 
-print(c)
+    # examine the noisy circuit 
+    print(c)
 
-# run the simulation!
-device = LocalSimulator('braket_dm')
-result = device.run(c, shots=1000).result()
+    # run the simulation!
+    device = LocalSimulator('braket_dm')
+    result = device.run(c, shots=1000).result()
 
-# now improve the mapping based on the results!
+    # now improve the mapping based on the results!    
+
+if __name__ == "__main__":
+    main()

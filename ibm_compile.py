@@ -19,67 +19,67 @@ def ibm_compile(circuit: Circuit) -> Circuit:
 
         # To make use of native gates, we'll define the operation for each 
         if op_name == "H":
-            gate = output.h(target)
+            gate = Circuit().h(target)
         elif op_name == "I":
-            gate = output.i(target)
+            gate = Circuit().i(target)
         elif op_name == "X":
-            gate = output.x(target)
+            gate = Circuit().x(target)
         elif op_name == "Y":
-            gate = output.y(target)
+            gate = Circuit().y(target)
         elif op_name == "Z":
-            gate = output.z(target)
+            gate = Circuit().z(target)
         elif op_name == "S":
-            gate = output.s(target)
+            gate = Circuit().si(target)
         elif op_name == "Si":
-            gate = output.si(target)
+            gate = Circuit().s(target)
         elif op_name == "T":
-            gate = output.t(target)
+            gate = Circuit().ti(target)
         elif op_name == "Ti":
-            gate = output.ti(target)
+            gate = Circuit().t(target)
         elif op_name == "V":
-            gate = output.v(target)
-        elif op_name == "V":
-            gate = output.vi(target)
+            gate = Circuit().vi(target)
+        elif op_name == "Vi":
+            gate = Circuit().v(target)
         elif op_name == "Rx":
-            gate = output.rx(target, -angle)
+            gate = Circuit().rx(target, -angle)
         elif op_name == "Ry":
-            gate = output.ry(target, -angle)
+            gate = Circuit().ry(target, -angle)
         elif op_name == "Rz":
-            gate = output.rz(target, -angle)
+            gate = Circuit().rz(target, -angle)
         elif op_name == "PhaseShift":
-            gate = output.phaseshift(target, -angle)
+            gate = Circuit().phaseshift(target, -angle)
         elif op_name == "CNot":
-            gate = output.cnot(*target)
+            gate = Circuit().cnot(*target)
         elif op_name == "Swap":
-            gate = output.swap(*target)
+            gate = Circuit().swap(*target)
         elif op_name == "ISwap":
-            gate = output.iswap(*target, -np.pi / 2)
+            gate = Circuit().pswap(*target, -np.pi / 2)
         elif op_name == "PSwap":
-            gate = output.pswap(*target, -angle)
+            gate = Circuit().pswap(*target, -angle)
         elif op_name == "XY":
-            gate = output.xy(*target, -angle)
+            gate = Circuit().xy(*target, -angle)
         elif op_name == "CPhaseShift":
-            gate = output.cphaseshift(*target, -angle)
+            gate = Circuit().cphaseshift(*target, -angle)
         elif op_name == "CPhaseShift00":
-            gate = output.cphaseshift00(*target, -angle)
+            gate = Circuit().cphaseshift00(*target, -angle)
         elif op_name == "CPhaseShift01":
-            gate = output.cphaseshift01(*target, -angle)
+            gate = Circuit().cphaseshift01(*target, -angle)
         elif op_name == "CPhaseShift10":
-            gate = output.cphaseshift10(*target, -angle)
+            gate = Circuit().cphaseshift10(*target, -angle)
         elif op_name == "CY":
-            gate = output.cy(*target)
+            gate = Circuit().cy(*target)
         elif op_name == "CZ":
-            gate = output.cz(*target)
+            gate = Circuit().cz(*target)
         elif op_name == "XX":
-            gate = output.xx(*target, -angle)
+            gate = Circuit().xx(*target, -angle)
         elif op_name == "YY":
-            gate = output.yy(*target, -angle)
+            gate = Circuit().yy(*target, -angle)
         elif op_name == "ZZ":
-            gate = output.zz(*target, -angle)
+            gate = Circuit().zz(*target, -angle)
         elif op_name == "CCNot":
-            gate = output.ccnot(*target)
+            gate = Circuit().ccnot(*target)
         elif op_name == "CSwap":
-            gate = output.cswap(*target)
+            gate = Circuit().cswap(*target)
         else:
             output_circ = gate.add(output)
     return output_circ
