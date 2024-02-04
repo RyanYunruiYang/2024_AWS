@@ -6,6 +6,7 @@ import numpy as np
 from scipy.stats import unitary_group
 from queue import PriorityQueue
 import math
+import random
 
 # import sys 
 # sys.path.append('../')
@@ -181,6 +182,8 @@ def reshape(circuit, vertex_map):
 
     return new_circuit
 
+def GreedyE():
+    pass
 
 def GreedyV(demand, vertex_fid):
     assert len(vertex_fid) >= len(demand)
@@ -202,6 +205,42 @@ def GreedyV(demand, vertex_fid):
     
     return vertex_map
 
+def GreedySwap(vertex_demand, two_qubit_demand, vertex_fid, two_qubit_fid):
+    assert len(vertex_fid) >= len(vertex_demand)
+    vertex_map = GreedyE(vertex_demand, vertex_fid)
+
+    # Repeat the swapping process until no improvement is possible
+    while True:
+        # Choose a random edge
+        i, j = random.choice(list(vertex_map.items()))
+
+        # Compare the net change in ln(fidelity) usage
+        swap_qubit_delta = 0
+        swap_qubit_delta += vertex_demand["initial"][i] * vertex_fid[vertex_map[i]] + vertex_demand["initial"][j] * two_qubit_fid[i][vertex_map[j]]
+        swap_qubit_delta -= vertex_demand["initial"][i] * vertex_fid[vertex_map[j]] + vertex_demand["initial"][j] * two_qubit_fid[i][vertex_map[i]]
+
+        for k in range(0, len(vetex_demand)):
+            if k in vertex_map:
+                swap_qubit_delta += two_qubit_demand[k][i] * two_qubit_fid[k][vertex_map[i]] + two_qubit_demand[k][j] * two_qubit_fid[k][vertex_map[j]]
+                swap_qubit_delta -= two_qubit_demand[k][i] * two_qubit_fid[k][vertex_map[j]] + two_qubit_demand[k][j] * two_qubit_fid[k][vertex_map[i]]
+
+        if (swap_qubit_delta < 0):
+            # Swap the qubits
+            vertex_map[i], vertex_map[j] = vertex_map[j], vertex_map[i]
+
+    return vertex_map
+
+# def calculate_value(demand, vertex_fid, two_qubit_fid, vertex_map):
+#     value = 0
+
+#     for i in range(len(demand)):
+#         value += vertex_fid[vertex_map[i]] * demand[i]
+
+#         for j in range(len(demand)):
+#             if j in vertex_map:
+#                 value += two_qubit_fid[j][vertex_map[i]] * demand[j]
+
+#     return value
 
 def main():
     # CNOT_usage = [
