@@ -22,7 +22,7 @@ class fidelity_classifier:
 
     def create_hadamard_circuit(self, gate_num=2):
         c = Circuit()
-        for qubit in range(n):
+        for qubit in range(self.n):
             for _ in range(gate_num):
                 c.h(qubit)
         c = self.noise.apply(c)
