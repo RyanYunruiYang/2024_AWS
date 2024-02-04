@@ -111,4 +111,4 @@ class fidelity_classifier:
                         cur_cnt += cnt
                 two_q_fidelity[a][b] = cur_cnt / shotnum
 
-        print(two_q_fidelity, sep="\n")
+        return two_q_fidelity
