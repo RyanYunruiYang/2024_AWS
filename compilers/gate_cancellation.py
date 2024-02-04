@@ -32,7 +32,7 @@ def gate_cancellation(instruct_arr):
     for gateLine in instruct_arr:
         i = 1
         while(i < len(gateLine)):
-            print(gateLine[i])
+            # print(gateLine[i])
             a = gateLine[i]['operator']
             b = gateLine[i-1]['operator']
             if(a == b and (a == 'H' or a == 'X' or a == 'Y' or a == 'Z')):
@@ -55,7 +55,7 @@ def get_gate_cancelled_circuit(circuit,n):
     for i in range(0, n):
         circuit.i(i)
     
-    print(circuit.instructions)
+    # print(circuit.instructions)
     
     for i in range(len(circuit.instructions)):
         row = circuit.instructions[i]
