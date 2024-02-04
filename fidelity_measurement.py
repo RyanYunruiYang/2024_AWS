@@ -25,7 +25,7 @@ class fidelity_classifier:
         for qubit in range(self.n):
             for _ in range(gate_num):
                 c.h(qubit)
-        c = self.noise.apply(c)
+        c = self.noise_model.apply(c)
         return c
 
     def single_qubit_fidelity(self, had_cnt=2):
@@ -90,7 +90,7 @@ class fidelity_classifier:
                     continue
                 c.h(a)
                 c.cnot(a, b)
-            c = self.noise.apply(c)
+            c = self.noise_model.apply(c)
 
             shotnum = 10000
             task = self.device.run(c, shots=shotnum)
