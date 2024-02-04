@@ -13,7 +13,7 @@ import math
 def qft(n, arr):
     circuit = Circuit()
     
-    for i in len(arr):
+    for i in range(len(arr)):
         if(arr[i] == 1):
             circuit.x(i)
     
@@ -23,7 +23,3 @@ def qft(n, arr):
             circuit.cphaseshift(i+j,i,(2 * np.pi / math.pow(2,j)))
 
     return circuit
-
-qft = qft(4)
-
-print(qft)
