@@ -10,8 +10,12 @@ import numpy as np
 from scipy.stats import unitary_group
 import math
 
-def qft(n):
+def qft(n, arr):
     circuit = Circuit()
+    
+    for i in len(arr):
+        if(arr[i] == 1):
+            circuit.x(i)
     
     for i in range(0, n):
         circuit.h(i)
